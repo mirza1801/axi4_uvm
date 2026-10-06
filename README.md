@@ -48,3 +48,10 @@ The `axi_mem_slave.sv` file represents the DUT and must be available in the simu
 ## Important filename note
 
 `tb_top.sv` currently includes `axi_env.sv`, while the environment file in this repository is named `axi.env.sv`. Rename the file or update the include statement before compiling.
+
+
+## Working simulation result
+
+The following screenshot shows the current basic AXI4 test running successfully in EDA Playground. The scoreboard confirms that the expected read data and DUT read data are both `50`, with zero UVM errors and zero UVM warnings.
+
+![Basic AXI4 UVM simulation result](docs/axi4_uvm_basic_test_result.png)
