@@ -1,21 +1,10 @@
 # AXI4 UVM Verification Project
 
-This project is developing a SystemVerilog/UVM verification environment for an AXI4 memory-mapped slave. The work is being built incrementally: first understanding the AXI4 protocol, then creating the UVM components, and finally extending the environment toward broader protocol coverage and reusable verification.
+This repository contains a basic SystemVerilog/UVM testbench for a simple AXI4 memory-mapped slave. The project is being developed incrementally: the current goal is to run and understand the basic write/read path, then expand protocol coverage.
 
 ## Project goal
 
-The long-term goal is to verify an AXI4 slave through a structured UVM testbench rather than relying only on directed signal-level tests. The environment is intended to:
-
-- Generate AXI4 read and write transactions.
-- Drive those transactions through the AXI interface.
-- Observe and reconstruct transactions from bus activity.
-- Maintain a reference model in the scoreboard.
-- Compare DUT behavior against expected results automatically.
-- Gradually verify bursts, byte enables, alignment, responses, IDs, outstanding transactions, ordering, assertions, and functional coverage.
-
-The project also serves as a practical study of the AXI4 protocol and UVM architecture, including the relationship between sequences, sequencers, drivers, monitors, scoreboards, phases, objections, interfaces, and transaction-level communication.
-
-## Verification architecture
+The testbench generates AXI4 transactions, drives them through an interface, observes completed bus transactions, and checks read data against a reference-memory model in the scoreboard.
 
 The intended transaction flow is:
 
@@ -23,121 +12,105 @@ The intended transaction flow is:
 Sequence → Sequencer → Driver → AXI Interface → DUT → Monitor → Scoreboard
 ```
 
-The current UVM structure contains:
+## Verification architecture
 
-- **Sequence** — Creates constrained-random and directed AXI transactions.
-- **Sequencer** — Sends transactions from the sequence to the driver.
-- **Driver** — Converts transaction objects into AXI signal activity.
-- **Monitor** — Observes the AXI channels and reconstructs completed transactions.
-- **Scoreboard** — Maintains reference memory and compares expected and actual read data.
-- **Agent** — Contains the sequencer, driver, and monitor.
-- **Environment** — Builds the agent and scoreboard and connects the monitor analysis port.
-- **Test** — Creates the environment, starts the sequence, and controls the UVM objection.
-- **Top-level testbench** — Generates the clock and reset, configures the virtual interface, instantiates the DUT, and starts UVM.
+- **Sequence** creates directed and constrained-random AXI transactions.
+- **Sequencer** passes sequence items to the driver.
+- **Driver** drives the AXI signals and collects responses.
+- **Monitor** observes handshakes and publishes completed transactions.
+- **Scoreboard** keeps reference memory and compares read data.
+- **Agent** contains the sequencer, driver, and monitor.
+- **Environment** builds the agent and scoreboard and connects the monitor analysis port.
+- **Test** builds the environment, starts the sequence, and controls the UVM objection.
+- **Top-level testbench** creates the clock and reset, configures the virtual interface, instantiates the DUT, and starts UVM.
 
-## Current working milestone
+## Current status
 
-The first complete basic AXI4 UVM flow is working. The current milestone uses a controlled test so that the basic environment can be validated before adding more complicated protocol behavior.
+The EDA Playground milestone exercises a basic single-beat write followed by a read from the same address. The directed example writes data `50` to address `100`, then reads it back. The scoreboard reports the expected and observed values.
 
-The current end-to-end path supports:
+The repository now includes the simple memory-slave DUT (`axi_mem_slave.sv`) and the environment file is named `axi_env.sv`, matching the include in `tb_top.sv`.
 
-- One basic AXI write transaction.
-- One basic AXI read transaction to the same address.
-- Basic memory storage in the simple slave DUT.
-- Driver handshaking on the basic AXI write and read channels.
-- Monitor reconstruction of the write and read activity.
-- Reference-memory updates in the scoreboard.
-- Automatic comparison of expected data with DUT read data.
-- Complete communication through the UVM hierarchy.
-
-The sequence includes a fully constrained-random transaction as well as directed transactions. The working milestone shown in the simulation result is the directed write/read case: the test writes data value `50` to address `100`, then reads the same address.
-
-## Working simulation result
-
-The screenshot below is the current basic AXI4 result from EDA Playground.
-
-The UVM topology is printed, showing the test, environment, agent, driver, monitor, sequencer, and scoreboard. The scoreboard reports:
-
-```text
-Expected data = 50
-DUT read data = 50
-```
-
-The UVM report summary shows zero warnings, zero errors, and zero fatal messages. This confirms that the basic write-to-memory and read-back path is working through the complete UVM environment.
+The EDA Playground result is shown below. A Synopsys VCS run from MobaXterm has not yet been confirmed.
 
 ![Basic AXI4 UVM simulation result](docs/axi4_uvm_basic_test_result.png)
 
 ## Project files
 
-- `tb_top.sv` — Top-level testbench, clock, reset, virtual-interface configuration, DUT instance, and UVM startup.
-- `axi_if.sv` — AXI interface and channel signals.
-- `axi_txn.sv` — AXI transaction object containing operation, ID, address, burst, data, strobes, and response fields.
-- `axi_sequence.sv` — Constrained-random and directed stimulus.
+- `tb_top.sv` — Top module, clock/reset, virtual-interface setup, DUT instance, and UVM startup. It includes the UVM testbench source files.
+- `axi_if.sv` — AXI interface signals.
+- `axi_mem_slave.sv` — Simple byte-addressable memory slave used as the DUT.
+- `axi_txn.sv` — AXI transaction item.
+- `axi_sequence.sv` — Directed and constrained-random stimulus.
 - `axi_sequencer.sv` — UVM sequencer.
-- `axi_driver.sv` — Drives transaction information onto the AXI interface.
-- `axi_monitor.sv` — Observes bus activity and publishes completed transactions.
-- `axi_scoreboard.sv` — Reference-memory model and data comparison logic.
+- `axi_driver.sv` — Drives AXI requests and accepts responses.
+- `axi_monitor.sv` — Observes AXI handshakes and publishes transactions.
+- `axi_scoreboard.sv` — Reference-memory model and read-data checks.
 - `axi_agent.sv` — Groups the sequencer, driver, and monitor.
 - `axi_env.sv` — Builds and connects the agent and scoreboard.
 - `axi_test.sv` — Creates the environment and starts the sequence.
-- `docs/axi4_uvm_basic_test_result.png` — Screenshot of the current working simulation result.
+- `docs/axi4_uvm_basic_test_result.png` — EDA Playground result screenshot.
 
-## Current limitations
+## Run with Synopsys VCS
 
-The current implementation is intentionally a basic starting point. The following features have been studied or planned but are not yet fully implemented in the code:
-
-- Complete burst support for FIXED, INCR, and WRAP bursts.
-- Multiple outstanding transactions.
-- Out-of-order response handling.
-- Full transaction-ID ordering checks.
-- Narrow and unaligned transfers.
-- Complete `WSTRB` behavior.
-- 4 KB boundary checking.
-- AXI error responses and broader response testing.
-- Protocol assertions.
-- Functional coverage.
-- Larger constrained-random regressions.
-
-The current DUT is also a simple memory slave used to establish the verification flow. It is not intended to represent a complete production AXI4 slave.
-
-## Next development steps
-
-1. Make the uploaded project self-contained by adding the DUT source file.
-2. Resolve the current environment filename mismatch: `tb_top.sv` includes `axi_env.sv`, while the repository file is named `axi.env.sv`.
-3. Add more basic directed tests for different addresses and data values.
-4. Expand the driver, DUT, monitor, and scoreboard for burst transactions.
-5. Add byte strobes, alignment checks, response checks, and boundary cases.
-6. Add assertions and functional coverage.
-7. Introduce more constrained-random testing and regression runs.
-8. Add checks for IDs, outstanding transactions, and response ordering.
-
-## Running the simulation
-
-A simulator with SystemVerilog and UVM support is required, such as Synopsys VCS, Questa, or Xcelium.
-
-After adding the DUT source and resolving the environment filename mismatch, a VCS flow can be run as follows:
+Connect to your Linux server with MobaXterm. In the remote terminal, clone the repository and enter its directory:
 
 ```bash
-vcs -full64 -sverilog -ntb_opts uvm-1.2 \
-  tb_top.sv axi_mem_slave.sv \
-  -o simv
+mkdir -p ~/projects
+cd ~/projects
+git clone https://github.com/mirzamalikbaig/axi4_uvm.git
+cd axi4_uvm
+```
+
+Check that VCS is available in the server environment:
+
+```bash
+command -v vcs
+vcs -ID
+```
+
+Before compiling, make sure the UVM macro include at the top of `tb_top.sv` is active and appears before `import uvm_pkg::*;`:
+
+```systemverilog
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+```
+
+In the checked repository snapshot, that include line is commented out. Enable it before compiling so the UVM macros used by the included testbench files are defined.
+
+Compile and run the test:
+
+```bash
+vcs -full64 -sverilog -ntb_opts uvm-1.2 -top top \
+  tb_top.sv axi_mem_slave.sv -o simv
 
 ./simv +UVM_TESTNAME=axi_test
 ```
 
-Because `tb_top.sv` includes the UVM source files, do not list those same included files a second time unless the compilation structure is changed.
+`tb_top.sv` includes the UVM source files, so do not also list those same files separately in the VCS command. The top-level module is named `top`, and the UVM test is named `axi_test`.
 
-## Development history
+The compile/run command has not yet been validated on the target VCS installation. The available UVM option and VCS setup can vary by server, so use the version installed on that machine if `-ntb_opts uvm-1.2` is not accepted.
 
-The project has progressed through these stages:
+## Current limitations
 
-1. **AXI4 foundations** — Studied the five AXI channels, master/slave roles, and the `VALID/READY` handshake.
-2. **AXI4 transaction rules** — Studied burst length, transfer size, burst type, IDs, responses, alignment, narrow transfers, and the 4 KB boundary.
-3. **UVM planning** — Defined the test, environment, agent, sequencer, driver, monitor, and scoreboard architecture.
-4. **Transaction and driver development** — Created the interface, transaction, sequence, sequencer, and initial driver.
-5. **DUT and monitor development** — Created a simple memory slave and a monitor capable of reconstructing activity across clock cycles.
-6. **Scoreboard and integration** — Added the reference memory, connected the UVM components, and debugged the hierarchy and phase integration.
-7. **First complete basic test** — Verified one write followed by one read through the full Sequence-to-Scoreboard path.
+This is a basic starting point, not a complete AXI4 verification environment. Features still to implement and verify include:
+
+- Full FIXED, INCR, and WRAP burst behavior.
+- Multiple outstanding transactions and response ordering.
+- Complete ID tracking and out-of-order response checks.
+- Narrow and unaligned transfers, complete `WSTRB` behavior, and 4 KB boundary checks.
+- Broader response/error testing.
+- Protocol assertions and functional coverage.
+- Larger constrained-random regressions.
+
+The memory slave is a simple educational DUT and does not represent a production AXI4 slave.
+
+## Next steps
+
+1. Enable the `uvm_macros.svh` include in `tb_top.sv`.
+2. Run the project with Synopsys VCS and record the compile and simulation result.
+3. Add directed tests for more addresses, data values, and byte strobes.
+4. Expand burst handling and scoreboard checks.
+5. Add assertions, functional coverage, and regression tests.
 
 ## References
 
