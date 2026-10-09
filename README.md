@@ -28,9 +28,9 @@ Sequence → Sequencer → Driver → AXI Interface → DUT → Monitor → Scor
 
 The EDA Playground milestone exercises a basic single-beat write followed by a read from the same address. The directed example writes data `50` to address `100`, then reads it back. The scoreboard reports the expected and observed values.
 
-The repository now includes the simple memory-slave DUT (`axi_mem_slave.sv`) and the environment file is named `axi_env.sv`, matching the include in `tb_top.sv`.
+The repository includes the simple memory-slave DUT (`axi_mem_slave.sv`) and the environment file is named `axi_env.sv`, matching the include in `tb_top.sv`.
 
-The EDA Playground result is shown below. A Synopsys VCS run from MobaXterm has not yet been confirmed.
+The screenshot below shows the EDA Playground result.
 
 ![Basic AXI4 UVM simulation result](docs/axi4_uvm_basic_test_result.png)
 
@@ -52,16 +52,7 @@ The EDA Playground result is shown below. A Synopsys VCS run from MobaXterm has 
 
 ## Run with Synopsys VCS
 
-Connect to your Linux server with MobaXterm. In the remote terminal, clone the repository and enter its directory:
-
-```bash
-mkdir -p ~/projects
-cd ~/projects
-git clone https://github.com/mirzamalikbaig/axi4_uvm.git
-cd axi4_uvm
-```
-
-Check that VCS is available in the server environment:
+Run these commands from the repository root on a machine with Synopsys VCS and UVM support:
 
 ```bash
 command -v vcs
@@ -75,9 +66,9 @@ Before compiling, make sure the UVM macro include at the top of `tb_top.sv` is a
 import uvm_pkg::*;
 ```
 
-In the checked repository snapshot, that include line is commented out. Enable it before compiling so the UVM macros used by the included testbench files are defined.
+In the current source, that include line is commented out. Enable it before compiling so the UVM macros used by the included testbench files are defined.
 
-Compile and run the test:
+Compile and run the test from the repository root:
 
 ```bash
 vcs -full64 -sverilog -ntb_opts uvm-1.2 -top top \
@@ -88,7 +79,7 @@ vcs -full64 -sverilog -ntb_opts uvm-1.2 -top top \
 
 `tb_top.sv` includes the UVM source files, so do not also list those same files separately in the VCS command. The top-level module is named `top`, and the UVM test is named `axi_test`.
 
-The compile/run command has not yet been validated on the target VCS installation. The available UVM option and VCS setup can vary by server, so use the version installed on that machine if `-ntb_opts uvm-1.2` is not accepted.
+The VCS command has not yet been validated across installations. If `-ntb_opts uvm-1.2` is not accepted, use the UVM version supported by the installed VCS setup.
 
 ## Current limitations
 
