@@ -78,7 +78,7 @@ The UVM report summary shows zero warnings, zero errors, and zero fatal messages
 - `axi_monitor.sv` — Observes bus activity and publishes completed transactions.
 - `axi_scoreboard.sv` — Reference-memory model and data comparison logic.
 - `axi_agent.sv` — Groups the sequencer, driver, and monitor.
-- `axi.env.sv` — Builds and connects the agent and scoreboard.
+- `axi_env.sv` — Builds and connects the agent and scoreboard.
 - `axi_test.sv` — Creates the environment and starts the sequence.
 - `docs/axi4_uvm_basic_test_result.png` — Screenshot of the current working simulation result.
 
