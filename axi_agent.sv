@@ -1,9 +1,10 @@
-/*******************************************************************************
+/******************************************************************************
  * Project     : AXI4 UVM Verification
  * File        : axi_agent.sv
  * Author      : Mirza Agha Malik Baig
- * Description : Groups the AXI sequencer, driver, and monitor; connects driver and sequencer.
- ******************************************************************************/
+ * Description : Groups the AXI sequencer, driver, and monitor; connects
+ *               driver and sequencer.
+******************************************************************************/
 
 class axi_agent extends uvm_agent;
 

@@ -1,9 +1,10 @@
-/*******************************************************************************
+/******************************************************************************
  * Project     : AXI4 UVM Verification
  * File        : tb_top.sv
  * Author      : Mirza Agha Malik Baig
- * Description : Creates clock and reset, connects interface and DUT, configures UVM, and starts the test.
- ******************************************************************************/
+ * Description : Creates clock and reset, connects interface and DUT,
+ *               configures UVM, and starts the test.
+******************************************************************************/
 
 //`include "uvm_macros.svh"
 import uvm_pkg::*;
