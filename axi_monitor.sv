@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Project     : AXI4 UVM Verification
+ * File        : axi_monitor.sv
+ * Author      : Mirza Agha Malik Baig
+ * Description : Reconstructs completed AXI read and write transactions from bus handshakes.
+ ******************************************************************************/
+
 class axi_monitor extends uvm_monitor;
 
   `uvm_component_utils(axi_monitor)

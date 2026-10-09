@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Project     : AXI4 UVM Verification
+ * File        : axi_scoreboard.sv
+ * Author      : Mirza Agha Malik Baig
+ * Description : Maintains reference memory and checks observed AXI read data.
+ ******************************************************************************/
+
 class axi_scoreboard extends uvm_scoreboard;
 
   `uvm_component_utils(axi_scoreboard)

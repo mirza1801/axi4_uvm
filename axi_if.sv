@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Project     : AXI4 UVM Verification
+ * File        : axi_if.sv
+ * Author      : Mirza Agha Malik Baig
+ * Description : Declares parameterized AXI4 memory-mapped channel signals.
+ ******************************************************************************/
+
 interface axi_if #(
     parameter int ADDR_WIDTH = 32,
     parameter int DATA_WIDTH = 32,

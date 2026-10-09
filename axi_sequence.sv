@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Project     : AXI4 UVM Verification
+ * File        : axi_sequence.sv
+ * Author      : Mirza Agha Malik Baig
+ * Description : Generates directed and constrained-random AXI transactions.
+ ******************************************************************************/
+
 class axi_sequence extends uvm_sequence #(axi_txn);
 
   `uvm_object_utils(axi_sequence)

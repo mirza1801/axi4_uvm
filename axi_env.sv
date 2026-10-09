@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Project     : AXI4 UVM Verification
+ * File        : axi_env.sv
+ * Author      : Mirza Agha Malik Baig
+ * Description : Builds the AXI agent and scoreboard and connects monitor analysis output.
+ ******************************************************************************/
+
 class axi_env extends uvm_env;
 
   `uvm_component_utils(axi_env)
