@@ -4,7 +4,7 @@
  * Author      : Mirza Agha Malik Baig
  * Description : Defines AXI operation, burst, address, data, strobe, and
  *               response fields.
-******************************************************************************/
+ *****************************************************************************/
 
 class axi_txn extends uvm_sequence_item;
 

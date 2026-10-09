@@ -4,7 +4,7 @@
  * Author      : Mirza Agha Malik Baig
  * Description : Generates directed and constrained-random AXI
  *               transactions.
-******************************************************************************/
+ *****************************************************************************/
 
 class axi_sequence extends uvm_sequence #(axi_txn);
 

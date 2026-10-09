@@ -4,7 +4,7 @@
  * Author      : Mirza Agha Malik Baig
  * Description : Declares parameterized AXI4 memory-mapped channel
  *               signals.
-******************************************************************************/
+ *****************************************************************************/
 
 interface axi_if #(
     parameter int ADDR_WIDTH = 32,

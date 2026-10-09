@@ -4,7 +4,7 @@
  * Author      : Mirza Agha Malik Baig
  * Description : Groups the AXI sequencer, driver, and monitor; connects
  *               driver and sequencer.
-******************************************************************************/
+ *****************************************************************************/
 
 class axi_agent extends uvm_agent;
 

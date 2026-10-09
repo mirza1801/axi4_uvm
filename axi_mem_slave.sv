@@ -4,7 +4,7 @@
  * Author      : Mirza Agha Malik Baig
  * Description : Implements a simple byte-addressable AXI4 memory slave
  *               for testbench use.
-******************************************************************************/
+ *****************************************************************************/
 
 module axi_mem_slave #(
     parameter int MEM_BYTES = 64*1024
