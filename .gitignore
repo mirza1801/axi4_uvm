@@ -1,0 +1,7 @@
+# Synopsys VCS generated build and simulation files
+/csrc/
+/simv
+/simv.daidir/
+/ucli.key
+/vc_hdrs.h
+/*.log

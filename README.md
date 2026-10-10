@@ -48,38 +48,25 @@ The screenshot below shows the EDA Playground result.
 - `axi_agent.sv` — Groups the sequencer, driver, and monitor.
 - `axi_env.sv` — Builds and connects the agent and scoreboard.
 - `axi_test.sv` — Creates the environment and starts the sequence.
-- `docs/axi4_uvm_basic_test_result.png` — EDA Playground result screenshot.
+- `run_vcs.sh` — Compiles and runs the UVM test with Synopsys VCS.\n- `docs/axi4_uvm_basic_test_result.png` — EDA Playground result screenshot.
 
 ## Run with Synopsys VCS
 
-Run these commands from the repository root on a machine with Synopsys VCS and UVM support:
+The project includes `run_vcs.sh`, which compiles the testbench with VCS and runs the `axi_test` UVM test. Run it from the repository root on a machine with Synopsys VCS and UVM support:
 
 ```bash
 command -v vcs
 vcs -ID
+./run_vcs.sh
 ```
 
-Before compiling, make sure the UVM macro include at the top of `tb_top.sv` is active and appears before `import uvm_pkg::*;`:
-
-```systemverilog
-`include "uvm_macros.svh"
-import uvm_pkg::*;
-```
-
-In the current source, that include line is commented out. Enable it before compiling so the UVM macros used by the included testbench files are defined.
-
-Compile and run the test from the repository root:
+The script compiles `tb_top.sv` and `axi_mem_slave.sv`. The UVM source files are included by `tb_top.sv`, so they are not listed separately. Extra simulator arguments can be passed after the script name, for example:
 
 ```bash
-vcs -full64 -sverilog -ntb_opts uvm-1.2 -top top \
-  tb_top.sv axi_mem_slave.sv -o simv
-
-./simv +UVM_TESTNAME=axi_test
+./run_vcs.sh +UVM_VERBOSITY=UVM_HIGH
 ```
 
-`tb_top.sv` includes the UVM source files, so do not also list those same files separately in the VCS command. The top-level module is named `top`, and the UVM test is named `axi_test`.
-
-The VCS command has not yet been validated across installations. If `-ntb_opts uvm-1.2` is not accepted, use the UVM version supported by the installed VCS setup.
+The script uses the VCS UVM 1.2 option. If the installed VCS setup uses another UVM version, update the option in `run_vcs.sh`.
 
 ## Current limitations
 
@@ -97,11 +84,10 @@ The memory slave is a simple educational DUT and does not represent a production
 
 ## Next steps
 
-1. Enable the `uvm_macros.svh` include in `tb_top.sv`.
-2. Run the project with Synopsys VCS and record the compile and simulation result.
-3. Add directed tests for more addresses, data values, and byte strobes.
-4. Expand burst handling and scoreboard checks.
-5. Add assertions, functional coverage, and regression tests.
+1. Run the basic test with Synopsys VCS.
+2. Add directed tests for more addresses, data values, and byte strobes.
+3. Expand burst handling and scoreboard checks.
+4. Add assertions, functional coverage, and regression tests.
 
 ## References
 
