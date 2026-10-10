@@ -48,7 +48,8 @@ The screenshot below shows the EDA Playground result.
 - `axi_agent.sv` — Groups the sequencer, driver, and monitor.
 - `axi_env.sv` — Builds and connects the agent and scoreboard.
 - `axi_test.sv` — Creates the environment and starts the sequence.
-- `run_vcs.sh` — Compiles and runs the UVM test with Synopsys VCS.\n- `docs/axi4_uvm_basic_test_result.png` — EDA Playground result screenshot.
+- `run_vcs.sh` — Compiles and runs the UVM test with Synopsys VCS.
+- `docs/axi4_uvm_basic_test_result.png` — EDA Playground result screenshot.
 
 ## Run with Synopsys VCS
 
